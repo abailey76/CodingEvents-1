@@ -1,7 +1,7 @@
 ﻿using CodingEvents.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodingEventsDemo.Data
+namespace CodingEvents.Data
 {
     public class EventDbContext : DbContext
     {

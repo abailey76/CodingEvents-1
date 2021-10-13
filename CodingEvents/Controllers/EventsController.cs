@@ -11,11 +11,18 @@ namespace CodingEvents.Controllers
 {
     public class EventsController : Controller
     {
+        private EventDbContext context;
+
+        public EventsController(EventDbContext dbContext)
+        {
+            context = dbContext;
+        }
+
         //GET: /<controller>/
         [HttpGet]
         public IActionResult Index()
         {
-            List<Event> events = new List<Event>(EventData.GetAll());
+            List<Event> events = context.Events.ToList();
             return View(events);
         }
 
@@ -39,7 +46,8 @@ namespace CodingEvents.Controllers
                     Type = addEventViewModel.Type
                 };
 
-                EventData.Add(newEvent);
+                context.Events.Add(newEvent);
+                context.SaveChanges();
 
                 return Redirect("/Events");
             }
@@ -50,7 +58,7 @@ namespace CodingEvents.Controllers
 
         public IActionResult Delete()
         {
-            ViewBag.events = EventData.GetAll();
+            ViewBag.events = context.Events.ToList();
             return View();
         }
 
@@ -59,15 +67,17 @@ namespace CodingEvents.Controllers
         {
             foreach(int id in eventIds)
             {
-                EventData.Remove(id);
+                Event theEvent = context.Events.Find(id);
+                context.Events.Remove(theEvent);
             }
+            context.SaveChanges();
             return Redirect("/Events");
         }
 
         [HttpGet("/Events/Edit/{eventId?}")]
         public IActionResult Edit(int eventId)
         {
-            ViewBag.evt = EventData.GetById(eventId);
+            ViewBag.evt = context.Events.Find(eventId);
             ViewBag.title = "Edit Event " + ViewBag.evt.Name + " (id = " + ViewBag.evt.Id + ")";
             return View();
         }
@@ -75,7 +85,7 @@ namespace CodingEvents.Controllers
         [HttpPost("/Events/Edit")]
         public IActionResult SubmitEditEventForm(int eventId, string name, string description)
         {
-            ViewBag.evt = EventData.GetById(eventId);
+            ViewBag.evt = context.Events.Find(eventId);
             ViewBag.evt.Name = name;
             ViewBag.evt.Description = description;
 
