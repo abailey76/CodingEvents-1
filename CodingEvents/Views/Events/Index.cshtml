@@ -1,16 +1,41 @@
-﻿<h1>Coding Events</h1>
+﻿@using CodingEvents
+
+@model List<Event>
+
+<h1>Coding Events</h1>
 
 <p>
     <a asp-controller="Events" asp-action="Add">Add Event</a>
 </p>
+<p>
+    <a asp-controller="Events" asp-action="Delete">Delete Event</a>
+</p>
 
-@if(ViewBag.events.Count == 0)
+@if(Model.Count == 0)
             {
                 <p>No events yet.</p>
             }
-<ul>
-    @foreach(string meeting in ViewBag.events)
-    {
-        <li>@meeting</li>
-    }
-</ul>
+            else
+            {
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Name</th>
+                        <th>Description</th>
+                        <th>Contact Email</th>
+                        <th>Type</th>
+                    </tr>
+                    @foreach (Event meeting in Model)
+                    {
+                        <tr>
+                            <td>@meeting.Id</td>
+                            <td>@meeting.Name</td>
+                            <td>@meeting.Description</td>
+                            <td>@meeting.ContactEmail</td>
+                            <td>@meeting.Type</td>
+                            <td><a asp-controller="Events" asp-action="Edit" asp-route-eventId="@meeting.Id">Edit Event</a></td>
+                        </tr>
+                    }
+                </table>
+            }
+
