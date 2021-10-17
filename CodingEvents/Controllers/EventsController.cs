@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodingEvents.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Tracing;
 
 namespace CodingEvents.Controllers
 {
@@ -103,7 +104,12 @@ namespace CodingEvents.Controllers
                .Include(e => e.Category)
                .Single(e => e.Id == id);
 
-            EventDetailViewModel viewModel = new EventDetailViewModel(theEvent);
+            List<EventTag> eventTags = context.EventTags
+                .Where(et => et.EventId == id)
+                .Include(et => et.Tag)
+                .ToList();
+
+            EventDetailViewModel viewModel = new EventDetailViewModel(theEvent, eventTags);
             return View(viewModel);
         }
     }

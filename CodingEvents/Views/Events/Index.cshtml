@@ -29,7 +29,7 @@
                     {
                         <tr>
                             <td>@meeting.Id</td>
-                            <td>@meeting.Name</td>
+                            <td><a asp-controller="Events" asp-action="Detail" asp-route-id=@meeting.Id>@meeting.Name</a></td>
                             <td>@meeting.Description</td>
                             <td>@meeting.ContactEmail</td>
                             <td>@meeting.Category.Name</td>
