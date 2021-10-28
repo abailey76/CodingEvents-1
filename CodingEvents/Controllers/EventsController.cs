@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using CodingEvents.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Tracing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CodingEvents.Controllers
 {
+    [Authorize]
     public class EventsController : Controller
     {
         private EventDbContext context;
@@ -21,7 +23,7 @@ namespace CodingEvents.Controllers
         }
 
         //GET: /<controller>/
-        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             List<Event> events = context.Events
